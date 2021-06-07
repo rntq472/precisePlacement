@@ -1,0 +1,18 @@
+Package: precisePlacement
+Title: Suite of Functions To Get Plot Elements Exactly Where You Want Them
+Version: 0.1.0
+Authors@R: 
+    person(given = "Jasper",
+           family = "Watson",
+           role = c("aut", "cre"),
+           email = "jasper.g.watson@gmail.com")
+Description: This package provides a selection of tools that make it easier to place elements onto a (base R) plot exactly where you want them. It allows users to identify points and distances on a plot in terms of inches, pixels, margin lines, and data units in a manner more simple than manipulating par(). It helps users identify where exactly the margin lines of a plot fall and to create sub-figures.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+BugReports: https://github.com/rntq472/precisePlacement/issues
