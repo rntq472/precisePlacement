@@ -64,8 +64,8 @@ omiForSubFigure <- function(bottom, left, top, right, units = 'proportion',
     
     units <- match.arg(units, choices = c('proportion', 'data'))
     
-    deviceRange <- getRange('device', 'in')
-
+    deviceRange <- getRange(region, 'in')
+    
     stopifnot(bottom < top, left < right)
     
     if (units == 'proportion'){
@@ -82,13 +82,13 @@ omiForSubFigure <- function(bottom, left, top, right, units = 'proportion',
     }
     
     bottomProp <- convertUnits('data', bottom, 'proportion', axis = 'y',
-                               region = 'device')
+                               region = region)
     leftProp <- convertUnits('data', left, 'proportion', axis = 'x',
-                             region = 'device')
+                             region = region)
     topProp <- convertUnits('data', top, 'proportion', axis = 'y',
-                            region = 'device')
+                            region = region)
     rightProp <- convertUnits('data', right, 'proportion', axis = 'x',
-                              region = 'device')
+                              region = region)
     
     omi <- c(bottomProp * deviceRange[2],
              leftProp * deviceRange[1],

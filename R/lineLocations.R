@@ -1,8 +1,7 @@
 ##' Wrapper Function for convertUnits Focused on Identifying the Locations of
 ##' the Margin Lines of a Plot
 ##' 
-##' @param side Integer giving the side of a plot to count lines from. Follows the
-##'             same format as graphics::side.
+##' @param side Integer giving the side of the plot to count lines from.
 ##' @param line Numeric vector giving margin lines one wishes to find the data
 ##'             coordinates of.
 ##' 

@@ -19,9 +19,7 @@ knitr::opts_chunk$set(dev.args = list(png = list(type = "cairo")))
 
 ```
 
-This package provides a selection of tools that make it easier to place elements onto a plot exactly where you want them. It does not use lattice or ggplot2 and is written for plots made with base R.
-
-It provides translations between inches, pixels, margin lines, data units, and proportions of the plotting space so that plot elements can easily be added relative to each other or to the figure boundaries. Alongside `par(xpd = NA)` it helps with tasks such as placing legends outside of the plotting boundaries and identifying margin lines.
+This package provides a selection of tools that make it easier to place elements onto a (base R) plot exactly where you want them. It provides translations between inches, pixels, margin lines, data units, and proportions of the plotting space so that plot elements can easily be added relative to each other or to the figure boundaries.
 
 The "How big is your graph?" cheat sheet written by Steve Simon, found at https://www.rstudio.com/wp-content/uploads/2016/10/how-big-is-your-graph.pdf, was very helpful. If you find yourself referring to that often then perhaps this package may be of interest.
 
@@ -33,7 +31,7 @@ All two-unit values are returned in the order of (x-axis, y-axis) like par('pin'
 
 ## Preliminaries: The Device Region and Margin Lines
 
-Plots created with base R contain four different "regions". The first is the innermost rectangle that the data points are displayed in. I refer to this as the "data region". By default this is extended by 4% in both the x and y axes before the axis labels are added. This is the "plot region". This behaviour can be disabled using the parameters `xaxs = 'i'` and `yaxis = 'i'`, either passed to `par()` or to `plot()`. If so the plot region will be the same size as the data region. Next is the "figure region". This includes the plot region plus the margin lines given by `par(mar)`. By default this is `c(5, 4, 4, 2) + 0.1`; if set to zero for all four sides then the figure region will be the same size as the plot region. Finally there is the device region. This contains the figure region plus any outer margin lines. There are none by default, meaning the device region is the same size as the figure region, but they can be specified using `par(oma)`.
+Plots created with base R contain four different "regions". The first is the innermost rectangle that the data points are displayed in. I refer to this as the "data region". By default this is extended by 4% in both the x and y axes before the axis labels are added. This is the "plot region". This behaviour can be disabled using the parameters `xaxs = 'i'` and `yaxis = 'i'`, either passed to `par()` or to `plot()`. If so the plot region will be the same size as the data region. Next is the "figure region". This includes the plot region plus the margin lines given by `par(mar)`. By default this is `c(5, 4, 4, 2) + 0.1`; if set to zero for all four sides then the figure region will be the same size as the plot region. Finally there is the device region. This contains the figure region(s) plus any outer margin lines. There are none by default, meaning the device region is the same size as the figure region for single-panel plots, but they can be specified using `par(oma)`.
 
 The plot below illustrates these regions. The functions used to highlight the regions and lines can be useful for diagnostic purposes.
 
@@ -43,35 +41,7 @@ The plot below illustrates these regions. The functions used to highlight the re
 library(precisePlacement)
 
 ## This is necessary to allow for plotting outside of the plot region.
-par(xpd = NA)
-
-oldPar <- par(oma = c(1, 2, 3, 4))
-
-plot(1:10, pch = 19)
-
-highlightDeviceRegion()
-highlightFigureRegion()
-highlightPlotRegion()
-highlightDataRegion()
-
-legend('topleft', c('Data Region', 'Plot Region', 'Figure Region', 'Device Region'),
-       text.col = c('darkgreen', 'red', 'orange', 'skyblue'), bty = 'n', text.font = 2,
-       xjust = 0.5, yjust = 0.5)
-
-par(oldPar)
-
-
-```
-
-The definition of the device and figure regions can be made more clear by highlighting the margin lines they consist of. Below is the same plot with lines added by `showMarginLines` and `showOuterMarginLines`.
-
-
-```{r echo = FALSE, fig.height = 5, fig.width = 5}
-
-## This is necessary to allow for plotting outside of the plot region.
-par(xpd = NA)
-
-oldPar <- par(oma = c(1, 2, 3, 4))
+par(xpd = NA, par(oma = c(1, 2, 3, 4)))
 
 plot(1:10, pch = 19)
 
@@ -87,66 +57,40 @@ legend('topleft', c('Data Region', 'Plot Region', 'Figure Region', 'Device Regio
        text.col = c('darkgreen', 'red', 'orange', 'skyblue'), bty = 'n', text.font = 2,
        xjust = 0.5, yjust = 0.5)
 
-par(oldPar)
-
-
 ```
 
-These illustrations make it much easier to judge what value is needed for the `line` parameter in the likes of `axis`, `mtext`, `rug`, and many more. This is illustrated below, along with the function `lineLocations` which returns the coordinates of each margin line in the same units as the data axes.
-
-```{r echo = TRUE, fig.height = 5, fig.width = 5}
-
-par(xpd = NA)
-
-plot(1:10, pch = 19, axes = FALSE, xlab = '', ylab = '')
-axis(2)
-box()
-
-## Each label applies to the line above it.
-mtext('Line 3', 1, 3)
-mtext('Line 2', 1, 2)
-mtext('Line 1', 1, 1)
-mtext('Line 0', 1, 0)
-mtext('Line -1', 1, -1)
-mtext('Line -2', 1, -2)
-mtext('Line -3', 1, -3)
-
-rug(1:10, lwd = 3, col = 'blue', line = -3, lend = 1)
-
-abline(h = lineLocations(1, -3:3), col = 'red')
-
-print(lineLocations(side = 1, line = -3:3))
-
-```
-
-It is worth noting that plot regions are not always divided up into an even number of lines. So if you count lines from the top and the bottom you will not necessarily "meet in the middle". This is why for functions such as `lineLocations` you must specify which side should be the reference.
+These illustrations make it easier to judge what value is needed for the `line` parameter in the likes of `axis`, `mtext`, `rug`, and many more. There is also the function `lineLocations` to help with this, which returns the coordinates of each margin line in the same units as the data axes.
 
 ## Plot Coordinates
 
 The regions of a plot can be measured in units of inches, pixels, margin lines, or data (meaning whatever is being plotted). 
 
-The `getBoundaries` function will return the four corners of a plot (like `par('usr')`) except one can specify which region to get the boundaries of: device, figure, plot, or data. This is in units of "data coordinates".
+The `getBoundaries` function will return the four corners of either the data, plot, figure, or device region, in units of data. (This is similar to `par('usr')` which returns the boundaries of the plot region.)
 
-The `getRange` function will return the distance between the left and right boundaries and the bottom and top boundaries. Again this can be for the device, figure, plot, or data region but unlike `getBoundaries` it can be in units of inches, pixels, margin lines, or data.
+The `getRange` function will return the distance between the left and right boundaries and the bottom and top boundaries. Again this can be for the data, plot, figure, or device region but unlike `getBoundaries` it can be in units of inches, pixels, margin lines, or data.
 
 ## Unit Conversions
 
-For the four measurement units (inches, pixels, margin lines, and data) there are a number of functions for converting between them. For relative conversions the functions are of the form "getXperY" as shown below:
+For relative conversions between inches, pixels, margin lines, and data there are a number of functions of the form "getXperY" as shown in the example below. These return numeric vectors of length two giving the value for the x and y axes, respectively.
 
-* getLinesPerInch
-* getInchesPerLine
-* getDataPerLine
-* getLinesPerDatum
-* getDataPerInch
-* getInchesPerDatum
-* getPixelsPerInch
-* getInchesPerPixel
-* getPixelsPerLine
-* getLinesPerPixel
-* getPixelsPerDatum
-* getDataPerPixel
+```{r, echo = TRUE, fig.height = 3, fig.width = 3}
 
-These return numeric vectors of length two giving the value for the x and y axes, respectively.
+plot(1:10)
+
+getLinesPerInch()
+getInchesPerLine()
+getDataPerLine()
+getLinesPerDatum()
+getDataPerInch()
+getInchesPerDatum()
+getPixelsPerInch()
+getInchesPerPixel()
+getPixelsPerLine()
+getLinesPerPixel()
+getPixelsPerDatum()
+getDataPerPixel()
+
+```
 
 For absolute conversions we can use the `convertUnits` function which will transform the units of a specific point on a plot. In this case the possible units are data points, margin lines, and proportions of the data/plot/figure/device region.
 
@@ -161,11 +105,6 @@ abline(h = convertUnits('proportion', 0.5, 'data', axis = 'y'),
 abline(v = convertUnits('proportion', 0.5, 'data', axis = 'x'),
        col = 'blue', lwd = 4)
 
-print(convertUnits('proportion', 0.5, 'data', axis = 'y'))
-## as.Date is needed because convertUnits returns a numeric value.
-print(as.Date(convertUnits('proportion', 0.5, 'data', axis = 'x'),
-              origin = '1970-01-01'))
-
 ## Change the region we are defining the proportions from.
 abline(v = convertUnits('proportion', 0.75, 'data', axis = 'x', region = 'plot'),
        col = 'darkgreen', lwd = 4)
@@ -175,15 +114,12 @@ abline(v = convertUnits('proportion', 0.75, 'data', axis = 'x', region = 'device
 
 ```
 
-This is particularly useful if we want to place a legend somewhere specific.
+This is useful if we want to place a legend somewhere specific.
 
 ```{r, echo = TRUE, fig.height = 5, fig.width = 5}
 
-par(xpd = NA)
-par(oma = c(0, 0, 0, 5))
-
+par(xpd = NA, oma = c(0, 0, 0, 5))
 plot(1:10, pch = 19)
-
 highlightDeviceRegion()
 
 legend(x = 11,
@@ -217,58 +153,45 @@ axis(1, pretty(x), pretty(x))
 axis(2, at = y, labels = names(projects), las = 2)
 box()
 
-## lwd is typically 1/96 of an inch.
-lineWidth <- (getRange('plot', 'data')[2] / length(projects)) * (getInchesPerDatum()[2] * 96)
+lineWidth <- (getRange('plot', 'data')[2] / length(projects)) * getPixelsPerDatum()[2]
 
 for (ii in seq_along(projects))
     lines(projects[[ii]], rep(ii, 2), lwd = lineWidth, ljoin = 2, lend = 1)
 
 ```
 
-
-
-
 ## Subfigures
 
 The `omiForSubFigure` function allows users to easily create a vector of four values with units of inches to pass to `par('omi')` and create a new plot as a sub-figure of an existing one.
 
-
 ```{r, echo = TRUE, fig.height = 7, fig.width = 7}
-
 
 plot(1:10, pch = 19)
 
-originalPlot <- par()
+originalPar <- par()
 
 ## Select a region in terms of proportions of the existing one.
-omi <- omiForSubFigure(0.5, 0.05, 0.95, 0.5, region = 'plot')
-par(omi = omi)
-par(new = TRUE)
-par(xpd = NA)
+omi <- omiForSubFigure(0.5, 0.05, 0.95, 0.5, region = 'device')
+par(omi = omi, new = TRUE, xpd = NA)
 plot(1:10, pch = 19, col = 'red')
 highlightFigureRegion()
 
 ## Reset to the original par otherwise we will be referencing the subplot.
-originalPlot[c('cin', 'cra', 'csi', 'cxy', 'din', 'page')] <- NULL
-par(originalPlot)
+originalPar[c('cin', 'cra', 'csi', 'cxy', 'din', 'page')] <- NULL
+par(originalPar)
 
 ## Select a new region in terms of the original plotting units.
 omi <- omiForSubFigure(2, 6, 5, 10, units = 'data')
 par(omi = omi, mar = c(0, 0, 0, 0))
-par(xpd = NA) ## This does nothing here because we set mar to zero. But note how
-## the axis labels overlay the outer plot regardless.
 plot(1:10, pch = 19, col = 'red', xlab = '', ylab = '')
 highlightFigureRegion()
-
-par(originalPlot)
-
 
 ```
 Note that when specifying the proportions for `omiForSubFigure` the top and right sides are defined with reference to the bottom and left. This was because I found it more intuitive to specify, for example, the fraction of the plot between 0.4 and 0.7 rather than counting 0.4 from one side and 0.3 from the other.
 
 ## Multiple Plots Per Device
 
-All of the functions mentioned above can also be used in cases of multiple plots per device.
+All of the functions mentioned above can also be used in cases of multiple plots per device. Those that pertain to only one of the plots will apply to the currently active one as per `par('mfg')`.
 
 ```{r, echo = FALSE, fig.height = 7, fig.width = 7}
 
@@ -335,6 +258,7 @@ showMarginLines()
 
 showOuterMarginLines()
 
+cat("par('mfg'): ", par('mfg'), '\n')
 cat('Boundaries of data region:', getBoundaries('data'), '\n')
 cat('Boundaries of plot region:', getBoundaries('plot'), '\n')
 cat('Boundaries of figure region:', getBoundaries('figure'), '\n')

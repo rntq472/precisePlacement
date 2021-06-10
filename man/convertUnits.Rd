@@ -15,8 +15,7 @@ and "proportion".}
 \item{to}{Units one wishes to convert from. Allowed values are "line", "data",
 and "proportion".}
 
-\item{side}{Integer giving the side of a plot to count lines from. Follows the
-same format as graphics::side.}
+\item{side}{Integer giving the side of the plot to count lines from.}
 
 \item{axis}{One of "x" or "y", giving the axis a proportion should be calculated
 from.}

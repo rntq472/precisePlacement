@@ -5,8 +5,7 @@
 ##' @param value Numeric value(s) of the coordinate(s) one wishes to convert.
 ##' @param to Units one wishes to convert from. Allowed values are "line", "data",
 ##'           and "proportion".
-##' @param side Integer giving the side of a plot to count lines from. Follows the
-##'             same format as graphics::side.
+##' @param side Integer giving the side of the plot to count lines from.
 ##' @param axis One of "x" or "y", giving the axis a proportion should be calculated
 ##'             from.
 ##' @param region Required when either from or to has the value "proportion". Must

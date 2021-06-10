@@ -8,8 +8,7 @@ the Margin Lines of a Plot}
 lineLocations(side, line)
 }
 \arguments{
-\item{side}{Integer giving the side of a plot to count lines from. Follows the
-same format as graphics::side.}
+\item{side}{Integer giving the side of the plot to count lines from.}
 
 \item{line}{Numeric vector giving margin lines one wishes to find the data
 coordinates of.}
