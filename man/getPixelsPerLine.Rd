@@ -13,6 +13,15 @@ Numeric vector of length two giving the number of pixels per line,
 \description{
 Find the Number of Pixels Per Margin Line in a Plot
 }
+\examples{
+\dontrun{
+
+plot(1:10)
+print(getPixelsPerLine())
+
+}
+
+}
 \author{
 Jasper Watson
 }

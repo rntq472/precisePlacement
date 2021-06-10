@@ -13,6 +13,15 @@ Numeric vector of length two giving the number of data points per inch,
 \description{
 Find the Number of Data Points Per Inch in a Plot
 }
+\examples{
+\dontrun{
+
+plot(1:10)
+print(getDataPerInch())
+
+}
+
+}
 \author{
 Jasper Watson
 }

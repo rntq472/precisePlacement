@@ -8,6 +8,14 @@
 ##'       other getXperY style functions.
 ##' 
 ##' @author Jasper Watson
+##'
+##' @examples
+##' \dontrun{
+##' 
+##' plot(1:10)
+##' print(getLinesPerInch())
+##' 
+##' }
 ##' 
 ##' @export
 ##' 
@@ -51,6 +59,14 @@ getLinesPerInch <- function(){
 ##'       other getXperY style functions.
 ##' 
 ##' @author Jasper Watson
+##'
+##' @examples
+##' \dontrun{
+##' 
+##' plot(1:10)
+##' print(getInchesPerLine())
+##' 
+##' }
 ##' 
 ##' @export
 ##' 
@@ -65,6 +81,14 @@ getInchesPerLine <- function()
 ##'         for the x axis and y axis, respectively.
 ##' 
 ##' @author Jasper Watson
+##'
+##' @examples
+##' \dontrun{
+##' 
+##' plot(1:10)
+##' print(getDataPerLine())
+##' 
+##' }
 ##' 
 ##' @export
 ##' 
@@ -79,6 +103,14 @@ getDataPerLine <- function()
 ##'         for the x axis and y axis, respectively.
 ##' 
 ##' @author Jasper Watson
+##'
+##' @examples
+##' \dontrun{
+##' 
+##' plot(1:10)
+##' print(getLinesPerDatum())
+##' 
+##' }
 ##' 
 ##' @export
 ##' 
@@ -93,6 +125,14 @@ getLinesPerDatum <- function()
 ##'         for the x axis and y axis, respectively.
 ##' 
 ##' @author Jasper Watson
+##'
+##' @examples
+##' \dontrun{
+##' 
+##' plot(1:10)
+##' print(getDataPerInch())
+##' 
+##' }
 ##' 
 ##' @export
 ##' 
@@ -121,6 +161,14 @@ getDataPerInch <- function(){
 ##'         for the x axis and y axis, respectively.
 ##' 
 ##' @author Jasper Watson
+##'
+##' @examples
+##' \dontrun{
+##' 
+##' plot(1:10)
+##' print(getInchesPerDatum())
+##' 
+##' }
 ##' 
 ##' @export
 ##' 
@@ -135,6 +183,14 @@ getInchesPerDatum <- function()
 ##'         for the x axis and y axis, respectively.
 ##' 
 ##' @author Jasper Watson
+##'
+##' @examples
+##' \dontrun{
+##' 
+##' plot(1:10)
+##' print(getPixelsPerInch())
+##' 
+##' }
 ##' 
 ##' @export
 ##' 
@@ -149,6 +205,14 @@ getPixelsPerInch <- function()
 ##'         for the x axis and y axis, respectively.
 ##' 
 ##' @author Jasper Watson
+##'
+##' @examples
+##' \dontrun{
+##' 
+##' plot(1:10)
+##' print(getInchesPerPixel())
+##' 
+##' }
 ##' 
 ##' @export
 ##' 
@@ -163,6 +227,14 @@ getInchesPerPixel <- function()
 ##'         for the x axis and y axis, respectively.
 ##' 
 ##' @author Jasper Watson
+##'
+##' @examples
+##' \dontrun{
+##' 
+##' plot(1:10)
+##' print(getPixelsPerLine())
+##' 
+##' }
 ##' 
 ##' @export
 ##' 
@@ -177,6 +249,14 @@ getPixelsPerLine <- function()
 ##'         for the x axis and y axis, respectively.
 ##' 
 ##' @author Jasper Watson
+##'
+##' @examples
+##' \dontrun{
+##' 
+##' plot(1:10)
+##' print(getLinesPerPixel())
+##' 
+##' }
 ##' 
 ##' @export
 ##' 
@@ -191,6 +271,14 @@ getLinesPerPixel <- function()
 ##'         for the x axis and y axis, respectively.
 ##' 
 ##' @author Jasper Watson
+##'
+##' @examples
+##' \dontrun{
+##' 
+##' plot(1:10)
+##' print(getPixelsPerDatum())
+##' 
+##' }
 ##' 
 ##' @export
 ##' 
@@ -205,6 +293,14 @@ getPixelsPerDatum <- function()
 ##'         for the x axis and y axis, respectively.
 ##' 
 ##' @author Jasper Watson
+##'
+##' @examples
+##' \dontrun{
+##' 
+##' plot(1:10)
+##' print(getDataPerPixel())
+##' 
+##' }
 ##' 
 ##' @export
 ##' 

@@ -24,7 +24,7 @@
 ##
 showOuterMarginLines <- function(sides = 1:4, lty = 3, col = 'purple', ...){
     
-    stopifnot(sides %in% 1:4)
+    stopifnot(sides %in% 1:4, length(sides) > 0)
     
     oma <- par('oma')
     omaFloor <- floor(oma)

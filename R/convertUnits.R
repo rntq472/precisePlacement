@@ -55,22 +55,46 @@
 ##
 convertUnits <- function(from, value, to, side = NULL, axis = NULL, region = 'plot'){
     
+    stopifnot(!is.null(from), !is.null(to), !is.null(value))
+    
     from <- match.arg(from, choices = c('line', 'data', 'proportion'))
     to <- match.arg(to, choices = c('line', 'data', 'proportion'))
-
+    
     if (inherits(value, c('Date', 'POSIXt')))
         value <- as.numeric(value)
     
-    if (any(c(from, to) %in% 'proportion'))
-        stopifnot(!is.null(region), side %in% c('device', 'figure', 'plot', 'data'))
+    if (from == to)
+        return(value)
     
+    ## Put the checks here before a plot is created if one doesn't already exist.
+    
+    if (any(c(from, to) %in% 'proportion'))
+        stopifnot(!is.null(region), length(region) == 1,
+                  region %in% c('device', 'figure', 'plot', 'data'))
+
+    if (from == 'line')
+        stopifnot(!is.null(side), length(side) == 1, side %in% 1:4)
+
+    if (from == 'data' & to == 'line')
+        stopifnot(!is.null(side), length(side) == 1, side %in% 1:4)
+
+    if (from == 'data' & to == 'proportion')
+        stopifnot(!is.null(axis), length(axis) == 1, axis %in% c('x', 'y'))
+    
+    if (from == 'proportion')
+        stopifnot(value >= 0, value <= 1)
+    
+    if (from == 'proportion' & to == 'data')
+        stopifnot(!is.null(axis), length(axis) == 1, axis %in% c('x', 'y'))
+    
+    if (from == 'proportion' & to == 'line')
+        stopifnot(!is.null(side), length(side) == 1, side %in% 1:4)
+
     plotBoundaries <- getBoundaries('plot')
     dataPerLine <- getDataPerLine()
     linesPerDatum <- getLinesPerDatum()
     
     if (from == 'line'){
-        
-        stopifnot(!is.null(side), side %in% 1:4)
         
         if (to == 'data'){
             
@@ -136,8 +160,6 @@ convertUnits <- function(from, value, to, side = NULL, axis = NULL, region = 'pl
         
         if (to == 'line'){
             
-            stopifnot(!is.null(side), side %in% 1:4)
-            
             if (side == 1){
                 
                 0 - (value - plotBoundaries[1]) * linesPerDatum[2]
@@ -157,8 +179,6 @@ convertUnits <- function(from, value, to, side = NULL, axis = NULL, region = 'pl
             }
             
         } else if (to == 'proportion'){
-            
-            stopifnot(!is.null(axis), axis %in% c('x', 'y'))
             
             if (axis == 'x'){
                 
@@ -184,8 +204,6 @@ convertUnits <- function(from, value, to, side = NULL, axis = NULL, region = 'pl
         
         if (to == 'data'){
             
-            stopifnot(!is.null(axis), axis %in% c('x', 'y'))
-            
             if (axis == 'x'){
                 
                 boundaries <- getBoundaries(region)
@@ -205,8 +223,6 @@ convertUnits <- function(from, value, to, side = NULL, axis = NULL, region = 'pl
             }
             
         } else if (to == 'line'){
-            
-            stopifnot(!is.null(side), side %in% 1:4)
             
             if (side %in% c(1, 3) ){
                 axis <- 'y'

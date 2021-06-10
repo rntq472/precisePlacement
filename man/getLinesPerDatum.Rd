@@ -13,6 +13,15 @@ Numeric vector of length two giving the number of lines per data point,
 \description{
 Find the Number of Margin Lines Per Data Point in a Plot
 }
+\examples{
+\dontrun{
+
+plot(1:10)
+print(getLinesPerDatum())
+
+}
+
+}
 \author{
 Jasper Watson
 }

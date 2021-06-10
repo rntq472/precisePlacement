@@ -21,7 +21,7 @@
 ##
 showMarginLines <- function(sides = 1:4, lty = 2, ...){
     
-    stopifnot(sides %in% 1:4)
+    stopifnot(sides %in% 1:4, length(sides) > 0)
     
     mar <- par('mar')
     marFloor <- floor(mar)

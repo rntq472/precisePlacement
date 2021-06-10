@@ -13,6 +13,15 @@ Numeric vector of length two giving the number of data points per pixel,
 \description{
 Find the Number of Data Points Per Pixel in a Plot
 }
+\examples{
+\dontrun{
+
+plot(1:10)
+print(getDataPerPixel())
+
+}
+
+}
 \author{
 Jasper Watson
 }

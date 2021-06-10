@@ -23,9 +23,11 @@
 ##' 
 ##
 getBoundaries <- function(region){
-
+    
+    stopifnot(!is.null(region))
+    
     region <- match.arg(region, choices = c('data', 'plot', 'figure', 'device'))
-
+    
     if (region == 'data'){
         
         plotBoundaries <- par('usr') ## x1, x2, y1, y2

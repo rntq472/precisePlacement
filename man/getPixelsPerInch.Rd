@@ -13,6 +13,15 @@ Numeric vector of length two giving the number of pixels per inch,
 \description{
 Find the Number of Pixels Per Inch in a Plot
 }
+\examples{
+\dontrun{
+
+plot(1:10)
+print(getPixelsPerInch())
+
+}
+
+}
 \author{
 Jasper Watson
 }

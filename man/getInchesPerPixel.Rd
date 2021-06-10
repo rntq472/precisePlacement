@@ -13,6 +13,15 @@ Numeric vector of length two giving the number of inches per pixel,
 \description{
 Find the Number of Inches Per Pixel in a Plot
 }
+\examples{
+\dontrun{
+
+plot(1:10)
+print(getInchesPerPixel())
+
+}
+
+}
 \author{
 Jasper Watson
 }

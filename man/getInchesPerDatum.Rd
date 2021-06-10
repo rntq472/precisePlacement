@@ -13,6 +13,15 @@ Numeric vector of length two giving the number of inches per data point,
 \description{
 Find the Number of Inches Per Data Point in a Plot
 }
+\examples{
+\dontrun{
+
+plot(1:10)
+print(getInchesPerDatum())
+
+}
+
+}
 \author{
 Jasper Watson
 }

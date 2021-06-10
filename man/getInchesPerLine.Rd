@@ -18,6 +18,15 @@ The number of lines per inch is the same for both the x and y axes but
       we return a vector of length two to maintain consistency with all of the
       other getXperY style functions.
 }
+\examples{
+\dontrun{
+
+plot(1:10)
+print(getInchesPerLine())
+
+}
+
+}
 \author{
 Jasper Watson
 }

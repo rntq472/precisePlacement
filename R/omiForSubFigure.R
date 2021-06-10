@@ -39,9 +39,9 @@
 ##' 
 ##' ## Show where the propotions are as a reference:
 ##' abline(v = convertUnits('proportion', seq(0, 1, by = 0.1), 'data',
-##'        region = 'device', axis = 'x'), lty = 2)
+##'        region = 'device', axis = 'x'), lty = 2, col = 'red')
 ##' abline(h = convertUnits('proportion', seq(0, 1, by = 0.1), 'data',
-##'        region = 'device', axis = 'y'), lty = 2)
+##'        region = 'device', axis = 'y'), lty = 2, col = 'red')
 ##' 
 ##' ## Create a new sub-plot.
 ##' par(omi = omiForSubFigure(0.2, 0.2, 0.8, 0.8, region = 'device'))
@@ -65,6 +65,8 @@ omiForSubFigure <- function(bottom, left, top, right, units = 'proportion',
     units <- match.arg(units, choices = c('proportion', 'data'))
     
     deviceRange <- getRange('device', 'in')
+
+    stopifnot(bottom < top, left < right)
     
     if (units == 'proportion'){
         

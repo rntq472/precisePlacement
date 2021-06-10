@@ -24,6 +24,8 @@
 ##' 
 ##
 getRange <- function(region, units){
+
+    stopifnot(!is.null(region), !is.null(units))
     
     region <- match.arg(region, choices = c('data', 'plot', 'figure', 'device'))
     units <- match.arg(units, choices = c('in', 'px', 'data', 'lines'))
@@ -94,7 +96,7 @@ getRange <- function(region, units){
             ##figureRange[2] <- figureRange[2] + sum(par('mai')[c(1, 3)])
             
             ##figureRange
-
+            
             ## Equivalent to:
             par('fin')
             

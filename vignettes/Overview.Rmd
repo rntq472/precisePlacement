@@ -21,9 +21,9 @@ knitr::opts_chunk$set(dev.args = list(png = list(type = "cairo")))
 
 This package provides a selection of tools that make it easier to place elements onto a plot exactly where you want them. It does not use lattice or ggplot2 and is written for plots made with base R.
 
-It provides translations between inches, pixels, margin lines, and data units so that plot elements can easily be added relative to each other or to the figure boundaries. Alongside `par(xpd = NA)` it helps with tasks such as placing legends outside of the plotting boundaries and identifying margin lines.
+It provides translations between inches, pixels, margin lines, data units, and proportions of the plotting space so that plot elements can easily be added relative to each other or to the figure boundaries. Alongside `par(xpd = NA)` it helps with tasks such as placing legends outside of the plotting boundaries and identifying margin lines.
 
-The "How big is your graph?" cheat sheet written by Stephen Simon, found at http://blog.pmean.com/cheatsheets/, was very helpful. If you find yourself referring to that often then perhaps this package may be of interest.
+The "How big is your graph?" cheat sheet written by Steve Simon, found at https://www.rstudio.com/wp-content/uploads/2016/10/how-big-is-your-graph.pdf, was very helpful. If you find yourself referring to that often then perhaps this package may be of interest.
 
 ## Conventions
 
@@ -148,7 +148,7 @@ For the four measurement units (inches, pixels, margin lines, and data) there ar
 
 These return numeric vectors of length two giving the value for the x and y axes, respectively.
 
-For absolute conversions we can use the `convertUnits` function which will transform the units of a specific point on a plot.
+For absolute conversions we can use the `convertUnits` function which will transform the units of a specific point on a plot. In this case the possible units are data points, margin lines, and proportions of the data/plot/figure/device region.
 
 ```{r, echo = TRUE, fig.height = 5, fig.width = 5}
 
