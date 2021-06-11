@@ -25,23 +25,21 @@ The "How big is your graph?" cheat sheet written by Steve Simon, found at https:
 
 ## Conventions
 
-All four-unit values are returned in the order of (bottom, left, top, right) like par('mar') and not like par('usr') which is (left, right, botton, top).
+All four-unit values are returned in the order of (bottom, left, top, right) like `par('mar')` and not like `par('usr')` which is (left, right, botton, top).
 
-All two-unit values are returned in the order of (x-axis, y-axis) like par('pin').
+All two-unit values are returned in the order of (x-axis, y-axis) like `par('pin')`.
 
 ## Preliminaries: The Device Region and Margin Lines
 
-Plots created with base R contain four different "regions". The first is the innermost rectangle that the data points are displayed in. I refer to this as the "data region". By default this is extended by 4% in both the x and y axes before the axis labels are added. This is the "plot region". This behaviour can be disabled using the parameters `xaxs = 'i'` and `yaxis = 'i'`, either passed to `par()` or to `plot()`. If so the plot region will be the same size as the data region. Next is the "figure region". This includes the plot region plus the margin lines given by `par(mar)`. By default this is `c(5, 4, 4, 2) + 0.1`; if set to zero for all four sides then the figure region will be the same size as the plot region. Finally there is the device region. This contains the figure region(s) plus any outer margin lines. There are none by default, meaning the device region is the same size as the figure region for single-panel plots, but they can be specified using `par(oma)`.
+Plots created with base R contain four different "regions". The first is the innermost rectangle that the data points are displayed in. I refer to this as the "data region". By default this is extended by 4% in both the x and y axes before the axis labels are added. This is the "plot region". This behaviour can be disabled using the parameters `xaxs = 'i'` and `yaxis = 'i'`, either passed to `par()` or to `plot()`. If so the plot region will be the same size as the data region. Next is the "figure region". This includes the plot region plus the margin lines given by `par(mar)`. By default this is `c(5, 4, 4, 2) + 0.1`; if set to zero for all four sides then the figure region will be the same size as the plot region. Finally there is the device region. This contains the figure region(s) plus any outer margin lines. There are none by default, meaning the device region is the same size as the figure region for single-panel plots, but outer margins can be specified using `par(oma)`.
 
 The plot below illustrates these regions. The functions used to highlight the regions and lines can be useful for diagnostic purposes.
 
 
 ```{r echo = TRUE, fig.height = 5, fig.width = 5}
-
 library(precisePlacement)
 
-## This is necessary to allow for plotting outside of the plot region.
-par(xpd = NA, par(oma = c(1, 2, 3, 4)))
+par(xpd = NA, oma = 1:4)
 
 plot(1:10, pch = 19)
 
@@ -74,7 +72,6 @@ The `getRange` function will return the distance between the left and right boun
 For relative conversions between inches, pixels, margin lines, and data there are a number of functions of the form "getXperY" as shown in the example below. These return numeric vectors of length two giving the value for the x and y axes, respectively.
 
 ```{r, echo = TRUE, fig.height = 3, fig.width = 3}
-
 plot(1:10)
 
 getLinesPerInch()
@@ -95,11 +92,10 @@ getDataPerPixel()
 For absolute conversions we can use the `convertUnits` function which will transform the units of a specific point on a plot. In this case the possible units are data points, margin lines, and proportions of the data/plot/figure/device region.
 
 ```{r, echo = TRUE, fig.height = 5, fig.width = 5}
-
 plot(seq(as.Date('2018-01-01'), as.Date('2019-01-01'), length.out = 10), 1:10,
      pch = 19, xlab = '', ylab = '')
 
-## Identify the "center" of the plot.
+## Identify the center of the plot.
 abline(h = convertUnits('proportion', 0.5, 'data', axis = 'y'),
        col = 'red', lwd = 4)
 abline(v = convertUnits('proportion', 0.5, 'data', axis = 'x'),
@@ -117,10 +113,8 @@ abline(v = convertUnits('proportion', 0.75, 'data', axis = 'x', region = 'device
 This is useful if we want to place a legend somewhere specific.
 
 ```{r, echo = TRUE, fig.height = 5, fig.width = 5}
-
 par(xpd = NA, oma = c(0, 0, 0, 5))
 plot(1:10, pch = 19)
-highlightDeviceRegion()
 
 legend(x = 11,
        y = convertUnits('proportion', 0.5, 'data', axis = 'y', region = 'device'),
@@ -133,7 +127,6 @@ legend(x = 11,
 We can also use the relative unit conversions to easily size elements for plotting. Below is a contrived example where we create a simple timeline chart - note how easy it is to select a value for `lwd` so that we don't have to use `rect`.
 
 ```{r, echo = TRUE, fig.height = 5, fig.width = 5}
-
 projects <- list(A = as.Date(c('2018-01-01', '2018-06-04')),
                  B = as.Date(c('2018-02-01', '2018-11-01')),
                  C = as.Date(c('2018-11-01', '2018-12-01')),
@@ -165,7 +158,6 @@ for (ii in seq_along(projects))
 The `omiForSubFigure` function allows users to easily create a vector of four values with units of inches to pass to `par('omi')` and create a new plot as a sub-figure of an existing one.
 
 ```{r, echo = TRUE, fig.height = 7, fig.width = 7}
-
 plot(1:10, pch = 19)
 
 originalPar <- par()
@@ -187,14 +179,13 @@ plot(1:10, pch = 19, col = 'red', xlab = '', ylab = '')
 highlightFigureRegion()
 
 ```
-Note that when specifying the proportions for `omiForSubFigure` the top and right sides are defined with reference to the bottom and left. This was because I found it more intuitive to specify, for example, the fraction of the plot between 0.4 and 0.7 rather than counting 0.4 from one side and 0.3 from the other.
+Note that when specifying the proportions for `omiForSubFigure` the top and right sides are defined with reference to the bottom and left. This is because I found it more intuitive to specify, for example, the fraction of the plot between 0.4 and 0.7 rather than counting 0.4 from one side and 0.3 from the other.
 
 ## Multiple Plots Per Device
 
 All of the functions mentioned above can also be used in cases of multiple plots per device. Those that pertain to only one of the plots will apply to the currently active one as per `par('mfg')`.
 
 ```{r, echo = FALSE, fig.height = 7, fig.width = 7}
-
 par(xpd = NA)
 
 oldPar <- par(mfrow = c(2, 2), oma = c(1.1,2.1,3.5,4.5))
