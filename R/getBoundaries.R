@@ -2,6 +2,10 @@
 ##' 
 ##' @param region The region of the plot to use for defining the boundaries. Must
 ##'               be one of "device", "figure", "plot", or "data".
+##' @param units Character string giving the units in which to define the range.
+##'              Must be either "data" or "lines".
+##' @param sides Numeric vector giving the four sides to uses as a reference if
+##'              the requested units are "lines". Defaults to 1:4.
 ##' 
 ##' @return A numeric vector of length four giving the coordinates of the plotting
 ##'         boundary, in the order of bottom, left, top, right.
@@ -16,17 +20,27 @@
 ##' print(getBoundaries('plot'))
 ##' print(getBoundaries('figure'))
 ##' print(getBoundaries('device'))
+##'
+##' print(getBoundaries('data', units = 'lines'))
+##' print(getBoundaries('plot', units = 'lines'))
+##' print(getBoundaries('figure', units = 'lines'))
+##' print(getBoundaries('device', units = 'lines'))
 ##' 
 ##' }
 ##' 
 ##' @export
 ##' 
 ##
-getBoundaries <- function(region){
+getBoundaries <- function(region, units = 'data', sides = 1:4){
     
-    stopifnot(!is.null(region))
+    stopifnot(!is.null(region), !is.null(units))
+
+    if (units == 'lines')
+        stopifnot(!is.null(sides), length(sides) == 4, is.numeric(sides),
+                  !is.na(sides))
     
     region <- match.arg(region, choices = c('data', 'plot', 'figure', 'device'))
+    units <- match.arg(units, choices = c('data', 'lines'))
     
     if (region == 'data'){
         
@@ -48,13 +62,13 @@ getBoundaries <- function(region){
                 (diff(plotBoundaries[3:4]) * 0.037037037)
         }
         
-        dataBoundaries[c(3, 1, 4, 2)] ## bottom, left, top, right
+        out <- dataBoundaries[c(3, 1, 4, 2)] ## bottom, left, top, right
         
     } else if (region == 'plot'){
 
         plotBoundaries <- par('usr') ## x1, x2, y1, y2
 
-        plotBoundaries[c(3, 1, 4, 2)] ## bottom, left, top, right
+        out <- plotBoundaries[c(3, 1, 4, 2)] ## bottom, left, top, right
         
     } else if (region == 'figure'){
 
@@ -66,7 +80,7 @@ getBoundaries <- function(region){
                               par('usr')[2] + par('mai')[4] * dataPerInch[1]
                               )
 
-        figureBoundaries
+        out <- figureBoundaries
         
     } else if (region == 'device'){
 
@@ -110,8 +124,17 @@ getBoundaries <- function(region){
                               par('usr')[2] + (par('mai')[4] + c4 + par('omi')[4]) * dataPerInch[1]
                               )
 
-        deviceBoundaries
+        out <- deviceBoundaries
         
     }
+    
+    if (units == 'lines'){
+        
+        for (ii in 1:4)
+            out[ii] <- convertUnits('data', out[ii], 'line', side = sides[ii])
+        
+    }
+    
+    out
     
 }

@@ -63,9 +63,9 @@ These illustrations make it easier to judge what value is needed for the `line` 
 
 The regions of a plot can be measured in units of inches, pixels, margin lines, or data (meaning whatever is being plotted). 
 
-The `getBoundaries` function will return the four corners of either the data, plot, figure, or device region, in units of data. (This is similar to `par('usr')` which returns the boundaries of the plot region.)
+The `getBoundaries` function will return the four corners of either the data, plot, figure, or device region, in units of either data or margin lines. (This is similar to `par('usr')` which returns the boundaries of the plot region in units of data.)
 
-The `getRange` function will return the distance between the left and right boundaries and the bottom and top boundaries. Again this can be for the data, plot, figure, or device region but unlike `getBoundaries` it can be in units of inches, pixels, margin lines, or data.
+The `getRange` function will return the distance between the left and right boundaries and the bottom and top boundaries. Again this can be for the data, plot, figure, or device region but in addition to data and margin lines it can also give units in inches or pixels.
 
 ## Unit Conversions
 
@@ -254,5 +254,26 @@ cat('Boundaries of data region:', getBoundaries('data'), '\n')
 cat('Boundaries of plot region:', getBoundaries('plot'), '\n')
 cat('Boundaries of figure region:', getBoundaries('figure'), '\n')
 cat('Boundaries of device region:', getBoundaries('device'), '\n')
+
+```
+
+
+```{r, echo = TRUE, fig.height = 7, fig.width = 7}
+par(xpd = NA, mfrow = c(2, 2))
+
+plot(1:10, pch = 19)
+plot(1:10, pch = 19)
+plot(1:10, pch = 19)
+plot(1:10, pch = 19)
+
+print(getBoundaries('device', units = 'data'))
+print(getBoundaries('device', units = 'lines'))
+
+x <- getBoundaries('device', units = 'lines')
+## lineLocations is a shortcut to using convertUnits.
+abline(h = lineLocations(side = 1, 0:x[1]), col = 'red', lty = 2)
+abline(v = lineLocations(side = 2, 0:x[2]), col = 'blue', lty = 2)
+abline(h = lineLocations(side = 3, 0:x[3]), col = 'green', lty = 2)
+abline(v = lineLocations(side = 4, 0:x[4]), col = 'black', lty = 2)
 
 ```

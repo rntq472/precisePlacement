@@ -4,11 +4,17 @@
 \alias{getBoundaries}
 \title{Determine the Boundaries of a Plot in Terms of the Data Units}
 \usage{
-getBoundaries(region)
+getBoundaries(region, units = "data", sides = 1:4)
 }
 \arguments{
 \item{region}{The region of the plot to use for defining the boundaries. Must
 be one of "device", "figure", "plot", or "data".}
+
+\item{units}{Character string giving the units in which to define the range.
+Must be either "data" or "lines".}
+
+\item{sides}{Numeric vector giving the four sides to uses as a reference if
+the requested units are "lines". Defaults to 1:4.}
 }
 \value{
 A numeric vector of length four giving the coordinates of the plotting
@@ -25,6 +31,11 @@ print(getBoundaries('data'))
 print(getBoundaries('plot'))
 print(getBoundaries('figure'))
 print(getBoundaries('device'))
+
+print(getBoundaries('data', units = 'lines'))
+print(getBoundaries('plot', units = 'lines'))
+print(getBoundaries('figure', units = 'lines'))
+print(getBoundaries('device', units = 'lines'))
 
 }
 
