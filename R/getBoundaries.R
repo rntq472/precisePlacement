@@ -14,7 +14,8 @@
 ##' 
 ##' @examples
 ##' \dontrun{
-##' 
+##'
+##' par(oma = 1:4)
 ##' plot(1:10)
 ##' print(getBoundaries('data'))
 ##' print(getBoundaries('plot'))

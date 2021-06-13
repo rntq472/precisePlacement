@@ -19,7 +19,7 @@ knitr::opts_chunk$set(dev.args = list(png = list(type = "cairo")))
 
 ```
 
-This package provides a selection of tools that make it easier to place elements onto a (base R) plot exactly where you want them. It provides translations between inches, pixels, margin lines, data units, and proportions of the plotting space so that plot elements can easily be added relative to each other or to the figure boundaries.
+This package provides a selection of tools that make it easier to place elements onto a (base R) plot exactly where you want them. It provides translations between inches, pixels, margin lines, data units, and proportions of the plotting space so that elements can easily be added relative to each other or to the figure boundaries.
 
 The "How big is your graph?" cheat sheet written by Steve Simon, found at https://www.rstudio.com/wp-content/uploads/2016/10/how-big-is-your-graph.pdf, was very helpful. If you find yourself referring to that often then perhaps this package may be of interest.
 
@@ -65,11 +65,11 @@ The regions of a plot can be measured in units of inches, pixels, margin lines, 
 
 The `getBoundaries` function will return the four corners of either the data, plot, figure, or device region, in units of either data or margin lines. (This is similar to `par('usr')` which returns the boundaries of the plot region in units of data.)
 
-The `getRange` function will return the distance between the left and right boundaries and the bottom and top boundaries. Again this can be for the data, plot, figure, or device region but in addition to data and margin lines it can also give units in inches or pixels.
+The `getRange` function will return the distance between the left and right boundaries and the bottom and top boundaries. Again this can be for the data, plot, figure, or device region but in addition to data and margin lines it can also give units of inches or pixels.
 
 ## Unit Conversions
 
-For relative conversions between inches, pixels, margin lines, and data there are a number of functions of the form "getXperY" as shown in the example below. These return numeric vectors of length two giving the value for the x and y axes, respectively.
+For relative conversions between inches, pixels, margin lines, and data units there are a number of functions of the form "getXperY" as shown in the example below. These return numeric vectors of length two giving the value for the x and y axes, respectively.
 
 ```{r, echo = TRUE, fig.height = 3, fig.width = 3}
 plot(1:10)
