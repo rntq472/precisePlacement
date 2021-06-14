@@ -2,7 +2,7 @@
 ##' an Existing One
 ##' 
 ##' @param bottom Boundary value for the bottom edge.
-##' @param left Boundary value for the boleftttom edge.
+##' @param left Boundary value for the left edge.
 ##' @param top Boundary value for the top edge.
 ##' @param right Boundary value for the right edge.
 ##' @param units The units in which the boundary parameters are defined. Must be one

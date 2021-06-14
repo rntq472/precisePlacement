@@ -25,7 +25,7 @@ The "How big is your graph?" cheat sheet written by Steve Simon, found at https:
 
 ## Conventions
 
-All four-unit values are returned in the order of (bottom, left, top, right) like `par('mar')` and not like `par('usr')` which is (left, right, botton, top).
+All four-unit values are returned in the order of (bottom, left, top, right) like `par('mar')` and not like `par('usr')` which is (left, right, bottom, top).
 
 All two-unit values are returned in the order of (x-axis, y-axis) like `par('pin')`.
 

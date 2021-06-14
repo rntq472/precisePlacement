@@ -17,7 +17,7 @@ omiForSubFigure(
 \arguments{
 \item{bottom}{Boundary value for the bottom edge.}
 
-\item{left}{Boundary value for the boleftttom edge.}
+\item{left}{Boundary value for the left edge.}
 
 \item{top}{Boundary value for the top edge.}
 
