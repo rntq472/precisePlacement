@@ -12,7 +12,7 @@ and "proportion".}
 
 \item{value}{Numeric value(s) of the coordinate(s) one wishes to convert.}
 
-\item{to}{Units one wishes to convert from. Allowed values are "line", "data",
+\item{to}{Units one wishes to convert to. Allowed values are "line", "data",
 and "proportion".}
 
 \item{side}{Integer giving the side of the plot to count lines from.}

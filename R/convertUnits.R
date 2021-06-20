@@ -3,7 +3,7 @@
 ##' @param from Units one wishes to convert from. Allowed values are "line", "data",
 ##'             and "proportion".
 ##' @param value Numeric value(s) of the coordinate(s) one wishes to convert.
-##' @param to Units one wishes to convert from. Allowed values are "line", "data",
+##' @param to Units one wishes to convert to. Allowed values are "line", "data",
 ##'           and "proportion".
 ##' @param side Integer giving the side of the plot to count lines from.
 ##' @param axis One of "x" or "y", giving the axis a proportion should be calculated
