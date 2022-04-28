@@ -277,3 +277,90 @@ abline(h = lineLocations(side = 3, 0:x[3]), col = 'green', lty = 2)
 abline(v = lineLocations(side = 4, 0:x[4]), col = 'black', lty = 2)
 
 ```
+
+## Axis Labels
+
+The `repelAxisLabels` function can calculate the locations necessary for axis labels such that they do not overlap.
+
+The example below has quite a lot of code but it is mostly assembling the necessary data and plotting the results with lines connecting original and new locations. The calculation of the axis spacings are a single function call for each side of the plot.
+
+Note how on side 1 the text has been reduced in size so that all of the labels fit (controlled by the reduceCex argument). On side 2 there was no spacing requested between each label, whilst on sides 3 and 4 the spacing was specified as the size of a single newline.
+
+
+```{r, echo = TRUE, fig.height = 7, fig.width = 7}
+
+allAt = list(seq(as.Date('2020-01-01'), as.Date('2021-01-01'), length.out = 10),
+          c(1:5, 1:5 + 0.1),
+          seq(as.Date('2020-02-01'), as.Date('2020-05-01'), length.out = 10),
+          seq(1, 5, length.out = 5)
+          )
+
+allLas <- list(0, 0, 2, 1)
+
+allLabels <- list(as.character(allAt[[1]]),
+                  rep('Foo', length(allAt[[2]])),
+                  as.character(allAt[[1]]),
+                  rep('Foo', length(allAt[[4]]))
+                  )
+allLabels[[4]][2] <- 'Very\nlong\nlabel\nwith\nnewlines\nincluded'
+
+allSpacing <- list('-', '', '\n', '\n')
+
+par(oma = c(1, 3, 4, 5))
+plot(allAt[[1]],
+     1:10,
+     axes = FALSE, xlab = '', ylab = '')
+box()
+
+tmp <- lapply(1:4, function(ii){
+    repelAxisLabels(side = ii, at = allAt[[ii]], labels = allLabels[[ii]],
+                    las = allLas[[ii]], spacing = allSpacing[[ii]])
+})
+newAt <- lapply(tmp, `[[`, 'at')
+newCex <- lapply(tmp, `[[`, 'cex.axis')
+
+par(xpd = NA)
+
+lineWidths <- list(getDataPerLine()[2],
+                   getDataPerLine()[1],
+                   getDataPerLine()[2],
+                   getDataPerLine()[1]
+                   )
+
+for (ii in seq_along(newAt) ){
+
+    for (jj in seq_along(newAt[[ii]]) ){
+        
+        axis(ii, labels = '', at = allAt[[ii]][jj],
+             cex.axis = newCex[[ii]], line = 0, tick = FALSE)
+
+        axis(ii, labels = allLabels[[ii]][jj], at = newAt[[ii]][jj],
+             cex.axis = newCex[[ii]],  las = allLas[[ii]], col = 'red',
+             col.ticks = 'red', col.axis = 'red', line = 1)
+
+        if (ii %in% 1 ){
+            
+            lines(c(newAt[[ii]][jj], allAt[[ii]][jj]),
+                  c(par('usr')[3], par('usr')[3] - lineWidths[[ii]])
+                  )
+        } else if (ii %in% 2 ){
+            
+            lines(c(par('usr')[1] - lineWidths[[ii]], par('usr')[1]),
+                  c(newAt[[ii]][jj], allAt[[ii]][jj])
+                  )
+        } else if (ii %in% 3 ){
+            
+            lines(c(newAt[[ii]][jj], allAt[[ii]][jj]),
+                  c(par('usr')[4] + lineWidths[[ii]], par('usr')[4])
+                  )
+        } else if (ii %in% 4 ){
+            
+            lines(c(par('usr')[2] + lineWidths[[ii]], par('usr')[2]),
+                  c(newAt[[ii]][jj], allAt[[ii]][jj])
+                  )
+        }
+    }
+}
+
+
+```
