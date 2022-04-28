@@ -2,6 +2,7 @@
 % Please edit documentation in R/precisePlacement.R
 \docType{package}
 \name{precisePlacement}
+\alias{precisePlacement-package}
 \alias{precisePlacement}
 \title{Suite of Functions To Get Plot Elements Exactly Where You Want Them}
 \description{
@@ -11,6 +12,13 @@ to identify points and distances on a plot in terms of inches, pixels,
 margin lines, data units, and proportions of the plotting space, all in a
 manner more simple than manipulating par(). It helps users identify where
 exactly the margin lines of a plot fall and to create sub-figures.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item Report bugs at \url{https://github.com/rntq472/precisePlacement/issues}
+}
+
 }
 \author{
 Jasper Watson
