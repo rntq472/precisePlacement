@@ -8,15 +8,15 @@ getLinesPerInch()
 }
 \value{
 Numeric vector of length two giving the number of lines per inch,
-        for the x axis and y axis, respectively.
+for the x axis and y axis, respectively.
 }
 \description{
 Find the Number of Margin Lines Per Inch in a Plot
 }
 \note{
 The number of lines per inch is the same for both the x and y axes but
-      we return a vector of length two to maintain consistency with all of the
-      other getXperY style functions.
+we return a vector of length two to maintain consistency with all of the
+other getXperY style functions.
 }
 \examples{
 \dontrun{

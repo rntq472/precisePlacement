@@ -15,7 +15,7 @@ Must be one of "in", "px", "data", or "lines".}
 }
 \value{
 Numeric vector of length two giving the range of the plotting
-        region, in the order of x-axis, y-axis.
+region, in the order of x-axis, y-axis.
 }
 \description{
 Determine the Width and Height of a Plot

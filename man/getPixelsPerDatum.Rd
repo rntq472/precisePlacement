@@ -8,7 +8,7 @@ getPixelsPerDatum()
 }
 \value{
 Numeric vector of length two giving the number of pixels per data point,
-        for the x axis and y axis, respectively.
+for the x axis and y axis, respectively.
 }
 \description{
 Find the Number of Pixels Per Data Point in a Plot

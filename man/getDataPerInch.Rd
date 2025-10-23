@@ -8,7 +8,7 @@ getDataPerInch()
 }
 \value{
 Numeric vector of length two giving the number of data points per inch,
-        for the x axis and y axis, respectively.
+for the x axis and y axis, respectively.
 }
 \description{
 Find the Number of Data Points Per Inch in a Plot

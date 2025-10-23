@@ -8,7 +8,7 @@ getInchesPerPixel()
 }
 \value{
 Numeric vector of length two giving the number of inches per pixel,
-        for the x axis and y axis, respectively.
+for the x axis and y axis, respectively.
 }
 \description{
 Find the Number of Inches Per Pixel in a Plot

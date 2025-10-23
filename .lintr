@@ -1,0 +1,2 @@
+linters: PackageManagement::getLinters('compulsory')
+exclusions: list('tests/testthat.R')

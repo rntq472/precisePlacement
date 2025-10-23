@@ -36,8 +36,8 @@ an Existing One
 }
 \details{
 The choice of accepting proportions instead of data units by default
-         is to more easily handle empty devices, otherwise there is a risk of
-         getting confused by the fact that par("usr") defaults to c(0, 1, 0, 1).
+is to more easily handle empty devices, otherwise there is a risk of
+getting confused by the fact that par("usr") defaults to c(0, 1, 0, 1).
 }
 \examples{
 \dontrun{
@@ -61,9 +61,9 @@ oldPar = par()
 
 ## Show where the propotions are as a reference:
 abline(v = convertUnits('proportion', seq(0, 1, by = 0.1), 'data',
-       region = 'device', axis = 'x'), lty = 2, col = 'red')
+region = 'device', axis = 'x'), lty = 2, col = 'red')
 abline(h = convertUnits('proportion', seq(0, 1, by = 0.1), 'data',
-       region = 'device', axis = 'y'), lty = 2, col = 'red')
+region = 'device', axis = 'y'), lty = 2, col = 'red')
 
 ## Create a new sub-plot.
 par(omi = omiForSubFigure(0.2, 0.2, 0.8, 0.8, region = 'device'))

@@ -8,7 +8,7 @@ getInchesPerDatum()
 }
 \value{
 Numeric vector of length two giving the number of inches per data point,
-        for the x axis and y axis, respectively.
+for the x axis and y axis, respectively.
 }
 \description{
 Find the Number of Inches Per Data Point in a Plot

@@ -137,7 +137,7 @@ projects <- list(A = as.Date(c('2018-01-01', '2018-06-04')),
                  )
 
 x <- seq(as.Date('2018-01-01'), as.Date('2019-01-01'), length.out = length(projects))
-y <- 1:length(projects)
+y <- seq_along(projects)
 
 plot(x, y, xlim = range(x), ylim = c(0.5, length(projects) + 0.5),
      type = 'n', xlab = 'Date', ylab = '', axes = FALSE, xaxs = 'i', yaxs = 'i')

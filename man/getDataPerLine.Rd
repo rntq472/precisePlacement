@@ -8,7 +8,7 @@ getDataPerLine()
 }
 \value{
 Numeric vector of length two giving the number of data points per line,
-        for the x axis and y axis, respectively.
+for the x axis and y axis, respectively.
 }
 \description{
 Find the Number of Data Points Per Margin Line in a Plot

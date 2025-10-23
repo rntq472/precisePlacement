@@ -8,7 +8,7 @@ getPixelsPerInch()
 }
 \value{
 Numeric vector of length two giving the number of pixels per inch,
-        for the x axis and y axis, respectively.
+for the x axis and y axis, respectively.
 }
 \description{
 Find the Number of Pixels Per Inch in a Plot

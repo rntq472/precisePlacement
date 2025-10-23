@@ -8,7 +8,7 @@ getLinesPerDatum()
 }
 \value{
 Numeric vector of length two giving the number of lines per data point,
-        for the x axis and y axis, respectively.
+for the x axis and y axis, respectively.
 }
 \description{
 Find the Number of Margin Lines Per Data Point in a Plot

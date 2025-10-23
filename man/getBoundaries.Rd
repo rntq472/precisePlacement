@@ -18,7 +18,7 @@ the requested units are "lines". Defaults to 1:4.}
 }
 \value{
 A numeric vector of length four giving the coordinates of the plotting
-        boundary, in the order of bottom, left, top, right.
+boundary, in the order of bottom, left, top, right.
 }
 \description{
 Determine the Boundaries of a Plot in Terms of the Data Units
