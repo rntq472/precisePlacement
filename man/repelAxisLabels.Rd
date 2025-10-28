@@ -30,6 +30,14 @@ if reduceCex is TRUE).
 \description{
 Distribute Axis Label Locations to Avoid Overlap.
 }
+\note{
+This function is experimental and just uses simple heuristics instead of
+any physics logic. It worked the one time I wanted it but if it doesn't
+generalise well I may not invest the time to try improving it.
+
+Also note that this function does not work when a plot is resized; you will have to
+re-run it after resizing.
+}
 \author{
 Jasper Watson
 }

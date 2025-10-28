@@ -21,7 +21,7 @@ knitr::opts_chunk$set(dev.args = list(png = list(type = "cairo")))
 
 This package provides a selection of tools that make it easier to place elements onto a (base R) plot exactly where you want them. It provides translations between inches, pixels, margin lines, data units, and proportions of the plotting space so that elements can easily be added relative to each other or to the figure boundaries.
 
-The "How big is your graph?" cheat sheet written by Steve Simon, found at https://www.rstudio.com/wp-content/uploads/2016/10/how-big-is-your-graph.pdf, was very helpful. If you find yourself referring to that often then perhaps this package may be of interest.
+The "How big is your graph?" cheat sheet written by Steve Simon, found at https://rstudio.github.io/cheatsheets/how-big-is-your-graph.pdf, was very helpful. If you find yourself referring to that often then perhaps this package may be of interest.
 
 ## Conventions
 
@@ -287,9 +287,9 @@ The example below has quite a lot of code but it is mostly assembling the necess
 Note how on side 1 the text has been reduced in size so that all of the labels fit (controlled by the reduceCex argument). On side 2 there was no spacing requested between each label, whilst on sides 3 and 4 the spacing was specified as the size of a single newline.
 
 
-```{r, echo = TRUE, fig.height = 7, fig.width = 7}
+```{r, echo = TRUE, fig.height = 6.5, fig.width = 6.5}
 
-allAt = list(seq(as.Date('2020-01-01'), as.Date('2021-01-01'), length.out = 10),
+allAt <- list(seq(as.Date('2020-01-01'), as.Date('2021-01-01'), length.out = 10),
           c(1:5, 1:5 + 0.1),
           seq(as.Date('2020-02-01'), as.Date('2020-05-01'), length.out = 10),
           seq(1, 5, length.out = 5)
@@ -308,7 +308,7 @@ allSpacing <- list('-', '', '\n', '\n')
 
 par(oma = c(1, 3, 4, 5))
 plot(allAt[[1]],
-     1:10,
+     rep(NA, 10), ylim=c(0,10),
      axes = FALSE, xlab = '', ylab = '')
 box()
 
@@ -341,7 +341,7 @@ for (ii in seq_along(newAt) ){
         if (ii %in% 1 ){
             
             lines(c(newAt[[ii]][jj], allAt[[ii]][jj]),
-                  c(par('usr')[3], par('usr')[3] - lineWidths[[ii]])
+		  c(par('usr')[3] - lineWidths[[ii]], par('usr')[3])
                   )
         } else if (ii %in% 2 ){
             

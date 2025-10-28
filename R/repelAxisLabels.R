@@ -14,14 +14,24 @@
 ##' and "cex.axis" is the cex value used to fit the labels without overlap (only necessary
 ##' if reduceCex is TRUE).
 ##'
+##' @note This function is experimental and just uses simple heuristics instead of
+##' any physics logic. It worked the one time I wanted it but if it doesn't
+##' generalise well I may not invest the time to try improving it.
+##'
+##' Also note that this function does not work when a plot is resized; you will have to
+##' re-run it after resizing.
+##'
 ##' @author Jasper Watson
+##'
+##' @importFrom stats setNames
 ##'
 ##' @export
 ##'
 ##
 repelAxisLabels <- function(side, at, labels, ..., spacing = "", reduceCex = TRUE) {
 
-    ## Ugly hack to catch, for example, both function(las) and function(las = 2).
+    ## Ugly hack to catch, for example, both repelAxisLabels(las) where it is already
+    ## defined and repelAxisLabels(las = 2).
     tmp1 <- setNames(list(...),
                      vapply(substitute(list(...)), deparse, character(1))[-1])
     tmp2 <- list(...)
@@ -29,10 +39,9 @@ repelAxisLabels <- function(side, at, labels, ..., spacing = "", reduceCex = TRU
     stringSizeArgs <- list()
     plotArgs <- list()
 
-    ## 'hadj', 'padj', Shouldn't matter?
+    ## hadj, padj, gap.axis, vfont ?
 
-    for (pp in c("font.axis", #' gap.axis', 'vfont',
-                 "family")) {
+    for (pp in c("font.axis", "family")) {
 
         if (pp %in% names(tmp1)) {
 
@@ -134,44 +143,42 @@ repelAxisLabels <- function(side, at, labels, ..., spacing = "", reduceCex = TRU
                     break
 
                 }
-
             }
         } else {
-            stop()
+            stop("Labels will not fit and reduceCex parameter is FALSE")
         }
-
     }
 
     originalAt <- at
 
     bindings <- rep(NA, length(at))
-    secondaryBindings <- rep(NA, length(at))
     cantMoveFurtherUp <- rep(FALSE, length(at))
     cantMoveFurtherDown <- rep(FALSE, length(at))
 
-    count <- 1
+    noChanges <- FALSE
 
-    while (TRUE) {
+    count <- 0
 
-       ## print(count)
+    repeat {
+
         count <- count + 1
 
-        upperBoundaries <- sapply(seq_along(at), function(ii) {
+        upperBoundaries <- vapply(seq_along(at), function(ii) {
             if (is.na(bindings[ii])) {
                 at[ii] + allWidths[ii] / 2
             } else {
                 use <- bindings %in% bindings[ii]
                 max(at[use] + allWidths[use] / 2)
             }
-        })
-        lowerBoundaries <- sapply(seq_along(at), function(ii) {
+        }, numeric(1))
+        lowerBoundaries <- vapply(seq_along(at), function(ii) {
             if (is.na(bindings[ii])) {
                 at[ii] - allWidths[ii] / 2
             } else {
                 use <- bindings %in% bindings[ii]
                 min(at[use] - allWidths[use] / 2)
             }
-        })
+        }, numeric(1))
 
         if (side %in% c(1, 3)) {
 
@@ -185,22 +192,25 @@ repelAxisLabels <- function(side, at, labels, ..., spacing = "", reduceCex = TRU
 
         }
 
-
-
         tmp.use <- upperBoundaries >= topBoundary
+
         if (any(tmp.use)) {
-            if (any(!is.na(bindings))) {
-                cantMoveFurtherUp[which(!is.na(bindings) & bindings %in% bindings[tmp.use])] <- TRUE
-            } else {
+
+            if (all(is.na(bindings))) {
                 cantMoveFurtherUp[tmp.use] <- TRUE
+            } else {
+                cantMoveFurtherUp[which(!is.na(bindings) & bindings %in% bindings[tmp.use])] <- TRUE
             }
         }
+
         tmp.use <- lowerBoundaries <= bottomBoundary
+
         if (any(tmp.use)) {
-            if (any(!is.na(bindings))) {
-                cantMoveFurtherDown[which(!is.na(bindings) & bindings %in% bindings[tmp.use])] <- TRUE
-            } else {
+
+            if (all(is.na(bindings))) {
                 cantMoveFurtherDown[tmp.use] <- TRUE
+            } else {
+                cantMoveFurtherDown[which(!is.na(bindings) & bindings %in% bindings[tmp.use])] <- TRUE
             }
         }
 
@@ -217,40 +227,38 @@ repelAxisLabels <- function(side, at, labels, ..., spacing = "", reduceCex = TRU
             if (any(use)) {
 
                 ## Pick the closest.
-
                 ind <- which(use)
-
                 ind[which.min(abs(ind - ii))]
-
 
             } else {
                 FALSE
             }
-
         })
 
-        hasOverlap <- sapply(overlap, is.numeric)
+        hasOverlap <- vapply(overlap, is.numeric, logical(1))
 
-        if (!any(hasOverlap))
+        if (!any(hasOverlap) && count == 1) {
+            noChanges <- TRUE
             break
+        }
 
         ## For each value of "at" that has an overlapping value, measure the amount
         ## the offending value would need to move.
-        needToShiftUp <- sapply(seq_along(at), function(ii) {
+        needToShiftUp <- vapply(seq_along(at), function(ii) {
             if (hasOverlap[ii]) {
                 upperBoundaries[ii] - lowerBoundaries[overlap[[ii]]]
             } else {
                 Inf
             }
-        })
+        }, numeric(1))
 
-        needToShiftDown <- sapply(seq_along(at), function(ii) {
+        needToShiftDown <- vapply(seq_along(at), function(ii) {
             if (hasOverlap[ii]) {
                 lowerBoundaries[ii] - upperBoundaries[overlap[[ii]]]
             } else {
                 -Inf
             }
-        })
+        }, numeric(1))
 
         needToShiftUp[!hasOverlap] <- Inf
         needToShiftDown[!hasOverlap] <- -Inf
@@ -271,11 +279,13 @@ repelAxisLabels <- function(side, at, labels, ..., spacing = "", reduceCex = TRU
         ## Start with the value of "at" that has the smallest gap, i.e. the two labels
         ## that are the most tightly overlapped.
 
-        if (all(is.infinite(needToShiftUp)) & all(is.infinite(needToShiftDown))) {
+        if (all(is.infinite(needToShiftUp)) && all(is.infinite(needToShiftDown))) {
 
             break
 
-        } else if (all(is.infinite(needToShiftDown)) || min(needToShiftUp) < min(abs(needToShiftDown))) {
+        } else if (all(is.infinite(needToShiftDown)) ||
+                   min(needToShiftUp) < min(abs(needToShiftDown))) {
+
             direction <- "Up"
             referencePoint <- which.min(needToShiftUp)
             oneToMove <- overlap[[referencePoint]]
@@ -291,8 +301,8 @@ repelAxisLabels <- function(side, at, labels, ..., spacing = "", reduceCex = TRU
                 amountToMove <- needToShiftUp[referencePoint]
 
             }
-
         } else {
+
             direction <- "Down"
             referencePoint <- which.min(abs(needToShiftDown))
             oneToMove <- overlap[[referencePoint]]
@@ -308,7 +318,6 @@ repelAxisLabels <- function(side, at, labels, ..., spacing = "", reduceCex = TRU
                 amountToMove <- needToShiftUp[referencePoint]
 
             }
-
         }
 
         if (any(cantMoveFurtherDown)) {
@@ -359,8 +368,6 @@ repelAxisLabels <- function(side, at, labels, ..., spacing = "", reduceCex = TRU
                 }
             }
 
-                                        # print('Not good')
-
             next
         }
 
@@ -377,12 +384,12 @@ repelAxisLabels <- function(side, at, labels, ..., spacing = "", reduceCex = TRU
             if (adjustment <= .Machine$double.eps^0.5) {
 
                 if (!is.na(bindings[referencePoint])) {
-                    asdf <- which(!is.na(bindings) & bindings %in% bindings[referencePoint])
+                    tempIndex <- which(!is.na(bindings) & bindings %in% bindings[referencePoint])
                 } else {
-                    asdf <- referencePoint
+                    tempIndex <- referencePoint
                 }
 
-                bindings[c(asdf, indicesToCombine)] <- bindings[oneToMove]
+                bindings[c(tempIndex, indicesToCombine)] <- bindings[oneToMove]
 
             }
 
@@ -397,12 +404,12 @@ repelAxisLabels <- function(side, at, labels, ..., spacing = "", reduceCex = TRU
             if (adjustment <= .Machine$double.eps^0.5) {
 
                 if (!is.na(bindings[oneToMove])) {
-                    asdf <- which(!is.na(bindings) & bindings %in% bindings[oneToMove])
+                    tempIndex <- which(!is.na(bindings) & bindings %in% bindings[oneToMove])
                 } else {
-                    asdf <- oneToMove
+                    tempIndex <- oneToMove
                 }
 
-                bindings[c(asdf, indicesToCombine)] <- bindings[referencePoint]
+                bindings[c(tempIndex, indicesToCombine)] <- bindings[referencePoint]
 
             }
 
@@ -411,8 +418,8 @@ repelAxisLabels <- function(side, at, labels, ..., spacing = "", reduceCex = TRU
         } else {
 
             indicesToCombine <- oneToMove
+
             if (adjustment <= .Machine$double.eps^0.5)
-                ## bindings[c(referencePoint, indicesToCombine)] <- length(unique(bindings[!is.na(bindings)])) + 1
                 ## Could have 1 and 2 then get bound together as 2.
                 if (all(is.na(bindings))) {
                     bindings[c(referencePoint, indicesToCombine)] <- 1
@@ -420,17 +427,22 @@ repelAxisLabels <- function(side, at, labels, ..., spacing = "", reduceCex = TRU
                     bindings[c(referencePoint, indicesToCombine)] <- max(bindings[!is.na(bindings)]) + 1
                 }
 
-
             at[indicesToCombine] <- at[indicesToCombine] + amountToMove
 
         }
 
+        if (count == 10000)
+            break
     }
 
-    ## Need to check everything for being able to shift closer to its origial point without overlapping
+    ## Need to check everything for being able to shift closer to its original point without overlapping
     ## with anything, for cases where, to keep the ordering correct, we spaced things out excessively.
 
-    while (TRUE) {
+    count <- 0
+
+    while (!noChanges) {
+
+        count <- count + 1
 
         upperBoundaries <- do.call(c, lapply(seq_along(at), function(ii) {
             at[ii] + allWidths[ii] / 2
@@ -445,20 +457,19 @@ repelAxisLabels <- function(side, at, labels, ..., spacing = "", reduceCex = TRU
 
             if (ii == length(at) || at[ii] - originalAt[ii] > 0) {
 
-                directionToMove <- "Down"
-
                 nearestBoundary <- upperBoundaries[ii - 1]
-
                 adjustment <- lowerBoundaries[ii] - nearestBoundary
 
             } else {
 
-                directionToMove <- "Up"
-
                 nearestBoundary <- lowerBoundaries[ii + 1]
-
                 adjustment <- upperBoundaries[ii] - nearestBoundary
 
+            }
+
+            if (length(adjustment) == 0) {
+                cantMove[] <- TRUE
+                break
             }
 
             if (abs(adjustment) > (diff(range(at)) / 100)) {
@@ -470,17 +481,18 @@ repelAxisLabels <- function(side, at, labels, ..., spacing = "", reduceCex = TRU
                 cantMove[ii] <- TRUE
 
             }
-
         }
 
         if (all(cantMove))
             break
 
+        if (count == 10000)
+            break
     }
 
-    ind <- sapply(seq_along(at), function(ii) {
+    ind <- vapply(seq_along(at), function(ii) {
         which(originalOrder == ii)
-    })
+    }, numeric(1))
 
     at <- at[ind]
     originalAt <- originalAt[ind]

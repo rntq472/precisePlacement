@@ -5,3 +5,4 @@
 ^README\.html$
 ^CRAN-RELEASE$
 ^.lintr$
+^CRAN-SUBMISSION$

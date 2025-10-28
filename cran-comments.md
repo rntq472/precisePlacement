@@ -1,8 +1,10 @@
 
+## Changes
+Minor feature updates
+
 ## Test environments
-* Local Kubuntu 20.04.2 (R-4.1.0, R-devel)
-* win-builder (devel, release, oldrelease)
+* Local Debian Trixie: R-4.5.1, and R-devel.
+* win-builder (devel, release, and oldrelease)
 
 ## R CMD check results
-* No errors or warnings.
-* One note - new submission.
+* No errors, warnings, or notes.

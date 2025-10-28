@@ -36,10 +36,10 @@ getLinesPerInch <- function() {
 
            } else {
 
-               if (!setequal(par("mar"), 0)) {
-                   (par("mar") / par("mai"))[par("mar") != 0][1]
-               } else {
+               if (setequal(par("mar"), 0)) {
                    (par("oma") / par("omi"))[par("oma") != 0][1]
+               } else {
+                   (par("mar") / par("mai"))[par("mar") != 0][1]
                }
 
            }
